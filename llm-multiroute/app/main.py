@@ -1,11 +1,6 @@
-import urllib3
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-
-# Disable SSL warnings for connections to Ollama API
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 from app.config import settings
 from app.controller.ai_controller import router as ai_router

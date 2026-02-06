@@ -1,12 +1,7 @@
-import urllib3
-
 from flask import Flask, render_template, request, jsonify
 import requests
 from config import BACKEND_URL, FLASK_PORT, DEBUG
 
-
-# Disable SSL warnings for local development
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 app = Flask(__name__)
 
