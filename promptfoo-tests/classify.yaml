@@ -57,6 +57,27 @@ tests:
           const parsed = JSON.parse(output);
           return typeof parsed.confidence === 'number' && parsed.confidence >= 0 && parsed.confidence <= 1;
 
+  # Test 21: Singtel-related text
+  - vars:
+      text: >-
+        The Singtel eshop team won the best team award for their outstanding
+        performance in driving online sales and enhancing customer experience.
+    assert:
+      - type: is-json
+      - type: javascript
+        value: |
+          const parsed = JSON.parse(output);
+          return Array.isArray(parsed.labels) && parsed.labels.length > 0;
+      - type: javascript
+        value: |
+          const parsed = JSON.parse(output);
+          return typeof parsed.primaryCategory === 'string' && parsed.primaryCategory.length > 0;
+      - type: javascript
+        value: |
+          const parsed = JSON.parse(output);
+          return typeof parsed.confidence === 'number' && parsed.confidence >= 0 && parsed.confidence <= 1;
+
+
   # Test 3: Finance-related text
   - vars:
       text: >-

@@ -36,9 +36,9 @@
   
   # To run:
   ## Terminal 1 - Backend
-  cd llm-python && python3 -m uvicorn app.main:app --port 8080 --reload
+  cd llm-python && source ../venv/bin/activate && python3 -m uvicorn app.main:app --port 8080 --reload
   
   ## Terminal 2 - Frontend
-  cd llm-frontend-python && python3 app.py
+  cd llm-frontend-python && source ../venv/bin/activate && python3 app.py
   
   ## Open http://localhost:5000 

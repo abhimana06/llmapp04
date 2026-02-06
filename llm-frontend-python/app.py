@@ -1,6 +1,10 @@
 from flask import Flask, render_template, request, jsonify
 import requests
 from config import BACKEND_URL, FLASK_PORT, DEBUG
+import urllib3
+
+# Disable SSL warnings for local development
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 app = Flask(__name__)
 
@@ -21,9 +25,21 @@ def proxy_analysis(analysis_type):
             f'{BACKEND_URL}/api/ai/{analysis_type}',
             json=request.get_json(),
             headers={'Content-Type': 'application/json'},
-            timeout=30
+            timeout=30,
+            verify=False
         )
-        return jsonify(resp.json()), resp.status_code
+        
+        # Check if response has content before parsing JSON
+        if not resp.content:
+            return jsonify({'error': 'Backend returned empty response'}), 502
+        
+        try:
+            return jsonify(resp.json()), resp.status_code
+        except requests.exceptions.JSONDecodeError:
+            return jsonify({
+                'error': f'Backend returned invalid JSON. Status: {resp.status_code}, Content: {resp.text[:200]}'
+            }), 502
+            
     except requests.exceptions.ConnectionError:
         return jsonify({'error': 'Cannot connect to backend service'}), 502
     except requests.exceptions.Timeout:

@@ -4,6 +4,10 @@ Provides helper functions to call each endpoint and return structured responses.
 """
 
 import requests
+import urllib3
+
+# Disable SSL warnings
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 BASE_URL = "http://localhost:8080/api/ai"
 HEADERS = {"Content-Type": "application/json"}
@@ -17,6 +21,7 @@ def classify_text(text: str) -> dict:
         json={"text": text},
         headers=HEADERS,
         timeout=TIMEOUT,
+        verify=False,
     )
     response.raise_for_status()
     return response.json()
@@ -29,6 +34,7 @@ def analyze_sentiment(text: str) -> dict:
         json={"text": text},
         headers=HEADERS,
         timeout=TIMEOUT,
+        verify=False,
     )
     response.raise_for_status()
     return response.json()
@@ -41,6 +47,7 @@ def summarize_text(text: str) -> dict:
         json={"text": text},
         headers=HEADERS,
         timeout=TIMEOUT,
+        verify=False,
     )
     response.raise_for_status()
     return response.json()
@@ -53,6 +60,7 @@ def detect_intent(text: str) -> dict:
         json={"text": text},
         headers=HEADERS,
         timeout=TIMEOUT,
+        verify=False,
     )
     response.raise_for_status()
     return response.json()

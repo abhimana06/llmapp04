@@ -18,7 +18,8 @@ class AIService:
         http_client: Optional[httpx.Client] = None,
         router: Optional[ModelRouter] = None,
     ):
-        self.http_client = http_client or httpx.Client(timeout=120.0)
+        # Create HTTP client with SSL verification disabled
+        self.http_client = http_client or httpx.Client(timeout=120.0, verify=False)
         self.base_url = settings.OLLAMA_BASE_URL
         self.temperature = settings.OLLAMA_TEMPERATURE
         self.api_key = settings.OLLAMA_API_KEY

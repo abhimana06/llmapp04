@@ -13,7 +13,8 @@ from app.dto.summary_response import SummaryResponse
 
 class AIService:
     def __init__(self, http_client: Optional[httpx.Client] = None):
-        self.http_client = http_client or httpx.Client(timeout=120.0)
+        # Create HTTP client with SSL verification disabled
+        self.http_client = http_client or httpx.Client(timeout=120.0, verify=False)
         self.base_url = settings.OLLAMA_BASE_URL
         self.model = settings.OLLAMA_MODEL
         self.temperature = settings.OLLAMA_TEMPERATURE

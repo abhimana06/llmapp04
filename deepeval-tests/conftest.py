@@ -2,9 +2,26 @@
 Shared fixtures and configuration for deepeval LLM evaluation tests.
 """
 
+import os
+import ssl
 import pytest
 from deepeval.metrics import GEval
 from deepeval.test_case import LLMTestCaseParams
+
+# Disable PostHog analytics to avoid SSL issues
+os.environ["DEEPEVAL_TELEMETRY_OPT_OUT"] = "YES"
+
+# Disable SSL verification globally for all HTTPS connections
+try:
+    _create_unverified_https_context = ssl._create_unverified_context
+except AttributeError:
+    pass
+else:
+    ssl._create_default_https_context = _create_unverified_https_context
+
+# Disable SSL warnings
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 # ---------------------------------------------------------------------------

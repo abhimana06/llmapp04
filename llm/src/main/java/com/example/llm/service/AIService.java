@@ -2,7 +2,12 @@ package com.example.llm.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.ai.openai.OpenAiChatOptions;
+import org.springframework.ai.openai.api.OpenAiApi;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 
 import com.example.llm.dto.*;
 
@@ -12,8 +17,27 @@ public class AIService {
     private final ChatClient chatClient;
     private final ObjectMapper objectMapper;
 
-    public AIService(ChatClient.Builder chatClientBuilder, ObjectMapper objectMapper) {
-        this.chatClient = chatClientBuilder.build();
+    public AIService(RestClient.Builder restClientBuilder, 
+                    ObjectMapper objectMapper,
+                    @Value("${spring.ai.openai.base-url}") String baseUrl,
+                    @Value("${spring.ai.openai.api-key}") String apiKey,
+                    @Value("${spring.ai.openai.chat.options.model}") String model,
+                    @Value("${spring.ai.openai.chat.options.temperature}") Double temperature) {
+        
+        // Create OpenAI API with SSL-bypassed RestClient
+        OpenAiApi openAiApi = new OpenAiApi(baseUrl, apiKey, restClientBuilder);
+        
+        // Configure chat options
+        OpenAiChatOptions options = OpenAiChatOptions.builder()
+                .withModel(model)
+                .withTemperature(temperature)
+                .build();
+        
+        // Create chat model with custom API and options
+        OpenAiChatModel chatModel = new OpenAiChatModel(openAiApi, options);
+        
+        // Build ChatClient with the custom chat model
+        this.chatClient = ChatClient.builder(chatModel).build();
         this.objectMapper = objectMapper;
     }
 

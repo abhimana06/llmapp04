@@ -56,6 +56,23 @@ tests:
         value: |
           const parsed = JSON.parse(output);
           return typeof parsed.sentimentScore === 'number' && parsed.sentimentScore < 0;
+  
+  # Test 2: Clearly positive sentiment
+  - vars:
+      text: >-
+        Singtel eshop service is terrible! The website is user-friendly,
+        delivery is prompt, and customer support is always ready to assist.
+        but have many issues. Highly recommend to everyone!
+    assert:
+      - type: is-json
+      - type: javascript
+        value: |
+          const parsed = JSON.parse(output);
+          return parsed.overallSentiment && parsed.overallSentiment.toLowerCase() === 'mixed';
+      - type: javascript
+        value: |
+          const parsed = JSON.parse(output);
+          return typeof parsed.sentimentScore === 'number' && parsed.sentimentScore >= 0;
 
   # Test 3: Neutral sentiment
   - vars:
