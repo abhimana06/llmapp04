@@ -4,10 +4,6 @@ Provides helper functions to call each endpoint and return structured responses.
 """
 
 import requests
-import urllib3
-
-# Disable SSL warnings
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 BASE_URL = "http://localhost:8080/api/ai"
 HEADERS = {"Content-Type": "application/json"}
